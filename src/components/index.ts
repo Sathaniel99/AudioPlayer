@@ -1,0 +1,9 @@
+export { ButtonControl } from "./ButtonControl";
+export { ButtonToggleReproMode } from "./ButtonToggleReproMode";
+export { Controles } from "./Controles";
+export { CoverSongs } from "./CoverSongs";
+export { DownloadButton } from "./DowloadButton";
+export { Player } from "./Player";
+export { Playlist } from "./Playlist";
+export { PlaylistElements } from "./PlaylistElements";
+export { SideBar } from "./SideBar";
