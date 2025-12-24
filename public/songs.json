@@ -1,48 +1,48 @@
 [
     {
-        "url": "/songs/Camila - Alejate De Mi.mp3",
+        "url": "/AudioPlayer/songs/Camila - Alejate De Mi.mp3",
         "name": "Alejate De Mi",
         "artist": "Camila",
         "cover": "/covers/camilaalejatedemi.jpg"
     },
     {
-        "url": "/songs/Camila - Decidiste Dejarme.mp3",
+        "url": "/AudioPlayer/songs/Camila - Decidiste Dejarme.mp3",
         "name": "Decidiste Dejarme",
         "artist": "Camila",
         "cover": "/covers/camiladecidistedejarme.jpg"
     },
     {
-        "url": "/songs/Shawn Mendes, Camila Cabello - Señorita.mp3",
+        "url": "/AudioPlayer/songs/Shawn Mendes, Camila Cabello - Señorita.mp3",
         "name": "Señorita",
         "artist": "Shawn Mendes & Camila Cabello",
         "cover": "/covers/camilacabelloshawnmendezseñorita.jpg"
     },
     {
-        "url": "/songs/Maroon 5 - Payphone (feat. Wiz Khalifa).mp3",
+        "url": "/AudioPlayer/songs/Maroon 5 - Payphone (feat. Wiz Khalifa).mp3",
         "name": "Payphone",
         "artist": "Maroon 5 ft Wiz Khalifa",
         "cover": null
     },
     {
-        "url": "/songs/Reik - Creo en ti.mp3",
+        "url": "/AudioPlayer/songs/Reik - Creo en ti.mp3",
         "name": "Creo en ti",
         "artist": "Reik",
         "cover": null
     },
     {
-        "url": "/songs/Reik - Ya Me Enteré.mp3",
+        "url": "/AudioPlayer/songs/Reik - Ya Me Enteré.mp3",
         "name": "Ya Me Enteré",
         "artist": "Reik",
         "cover": null
     },
     {
-        "url": "/songs/Los Aldeanos - Vereda tropical.mp3",
+        "url": "/AudioPlayer/songs/Los Aldeanos - Vereda tropical.mp3",
         "name": "Vereda tropical",
         "artist": "Los Aldeanos",
         "cover": null
     },
     {
-        "url": "/songs/Bruno Mars - Young Girls.mp3",
+        "url": "/AudioPlayer/songs/Bruno Mars - Young Girls.mp3",
         "name": "Young Girls",
         "artist": "Bruno Mars",
         "cover": "/covers/brunomarsyounggirls.jpg"

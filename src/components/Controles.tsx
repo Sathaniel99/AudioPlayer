@@ -2,7 +2,7 @@
 import { BiSkipPrevious, BiStop, BiSkipNext } from "react-icons/bi"
 // Componentes
 import { ButtonControl, SideBar } from "./index"
-import { Tooltip, TooltipTrigger, TooltipContent, NavigationMenu, NavigationMenuItem, NavigationMenuContent, NavigationMenuTrigger, Slider } from "./ui/index"
+import { Tooltip, TooltipTrigger, TooltipContent, NavigationMenu, NavigationMenuItem, NavigationMenuContent, NavigationMenuTrigger, Slider, Skeleton } from "./ui/index"
 // Hooks
 import { usePlayer } from "@/hooks/usePlayer"
 
@@ -10,6 +10,7 @@ export function Controles() {
     const {
         // ESTADOS
         volume,
+        currentSong,
         // FUNCIONES
         toggleMute,
         handleStop,
@@ -19,10 +20,10 @@ export function Controles() {
         handleSiguienteSong,
         changeVolume,
         getVolumeIcon,
-     } = usePlayer();
+    } = usePlayer();
 
     const ax = getPlay_Pause();
-    
+
     const buttons = [
         {
             icon: <BiSkipPrevious />,
@@ -49,26 +50,37 @@ export function Controles() {
     return (
         <>
             <SideBar />
-            {buttons.map((button, index) => (
-                <ButtonControl key={index} icon={button.icon} text={button.text} handled={button.handled} />
-            ))}
-            <Tooltip>
-                <TooltipTrigger asChild>
-                    <NavigationMenu className='hidden md:block gap-3'>
-                        <NavigationMenuItem className='hide-second-child list-none'>
-                            <NavigationMenuTrigger className='border border-purple-950 active:border-purple-950/25 bg-purple-900/15! hover:bg-purple-950! active:bg-purple-950/50!' onClick={toggleMute}>
-                                {getVolumeIcon()}
-                            </NavigationMenuTrigger>
-                            <NavigationMenuContent>
-                                <Slider defaultValue={[1]} value={[volume]} onValueChange={changeVolume} max={1} step={0.01} className="w-25 cursor-pointer" />
-                            </NavigationMenuContent>
-                        </NavigationMenuItem>
-                    </NavigationMenu>
-                </TooltipTrigger>
-                <TooltipContent>
-                    Volumen
-                </TooltipContent>
-            </Tooltip>
+            {currentSong.url != "" ?
+                (
+                    <>
+                        {buttons.map((button, index) => (
+                            <ButtonControl key={index} icon={button.icon} text={button.text} handled={button.handled} />
+                        ))}
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <NavigationMenu className='hidden md:block gap-3'>
+                                    <NavigationMenuItem className='hide-second-child list-none'>
+                                        <NavigationMenuTrigger className='border border-purple-950 active:border-purple-950/25 bg-purple-900/15! hover:bg-purple-950! active:bg-purple-950/50!' onClick={toggleMute}>
+                                            {getVolumeIcon()}
+                                        </NavigationMenuTrigger>
+                                        <NavigationMenuContent>
+                                            <Slider defaultValue={[1]} value={[volume]} onValueChange={changeVolume} max={1} step={0.01} className="w-25 cursor-pointer" />
+                                        </NavigationMenuContent>
+                                    </NavigationMenuItem>
+                                </NavigationMenu>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                Volumen
+                            </TooltipContent>
+                        </Tooltip>
+                    </>
+                ) :
+                (<>
+                    {[...Array(4).fill('h-10 w-10 rounded-full'), 'h-9 w-16 rounded'].map((classE, index) => (
+                        <Skeleton className={`${classE} border border-purple-950 bg-purple-900/15`} key={index} />
+                    ))}
+                </>)
+            }
         </>
     )
 }

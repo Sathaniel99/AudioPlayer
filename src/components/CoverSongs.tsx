@@ -52,7 +52,7 @@ export const CoverSongs = ({
     }, [name, artist]);
 
     const containerClasses = variant === 'player'
-        ? 'border-2 border-neutral-700 rounded shadow-2xl dark:shadow-neutral-50/10 overflow-hidden'
+        ? 'border border-neutral-800 rounded shadow-2xl dark:shadow-neutral-50/10 overflow-hidden'
         : 'border border-neutral-800 rounded relative overflow-hidden w-full h-full';
 
     const containerStyle = variant === 'player'
@@ -77,7 +77,7 @@ export const CoverSongs = ({
             ) : variant === 'player' ? (
                 <img
                     className="object-cover w-full h-full"
-                    src={coverUrl || '/notfound.jpg'}
+                    src={coverUrl || '/AudioPlayer/notfound.jpg'}
                     alt={`${artist} - ${name}`}
                     onError={() => setCoverUrl(null)}
                 />

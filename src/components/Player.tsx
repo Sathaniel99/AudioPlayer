@@ -1,5 +1,5 @@
 // Componentes
-import { Slider } from '@/components/ui/index';
+import { Slider, Skeleton } from '@/components/ui/index';
 import { DownloadButton, ButtonToggleReproMode, Controles, CoverSongs } from '@/components/index';
 // Hooks
 import { usePlayer } from '@/hooks/usePlayer';
@@ -28,7 +28,7 @@ export function Player() {
   }, []);
 
   return (
-    <div className='px-15 py-10 flex flex-col justify-center relative'>
+    <div className='px-15 py-10 flex flex-col justify-center relative min-w-108'>
       {/* Botones superiores */}
       <DownloadButton fileName={`${currentSong.artist} - ${currentSong.name}`} songUrl={currentSong.url}></DownloadButton>
       <ButtonToggleReproMode />
@@ -73,22 +73,31 @@ export function Player() {
 
       {/* Tiempo transcurrido, slider y Tiempo total del audio */}
       <audio className='hidden' ref={audioRef} onCanPlay={handleCanPlay} onEnded={handleSiguienteSong} onTimeUpdate={handlerPlay} onLoadedMetadata={handlerLoadedMetadata} src={currentSong.url} ></audio>
-      <div className='flex justify-between gap-3 my-2'>
-        <h2>{timeSong}</h2>
-        <Slider
-          defaultValue={[0]}
-          value={[timeSongPercent]}
-          onValueChange={handledMoveTime}
-          max={100}
-          disabled={!isSelectedMusic}
-          step={0.1}
-          className='cursor-pointer'
-        />
-        <h2>{totalTimeSong}</h2>
+      <div className='flex h-6 justify-between items-center gap-3 my-2'>
+        {currentSong.url != "" ?
+          (<>
+            <h2>{timeSong}</h2>
+            <Slider
+              defaultValue={[0]}
+              value={[timeSongPercent]}
+              onValueChange={handledMoveTime}
+              max={100}
+              disabled={!isSelectedMusic}
+              step={0.1}
+              className='cursor-pointer'
+            />
+            <h2>{totalTimeSong}</h2>
+          </>) :
+          (<>
+            <span className='animate-pulse text-white/50'>00:00</span>
+            <Skeleton className='h-2 w-full rounded-full' />
+            <span className='animate-pulse text-white/50'>00:00</span>
+          </>)
+        }
       </div>
 
       {/* Botones de control */}
-      <div className='flex gap-3 justify-center my-3 items-center'>
+      <div className='flex gap-3 h-10 justify-center my-3 items-center'>
         <Controles />
       </div>
     </div>

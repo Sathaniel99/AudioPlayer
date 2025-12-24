@@ -22,18 +22,23 @@ export const PlayerProvider: React.FC<PlayerProviderProps> = ({ children }) => {
     const [isMuted, setIsMuted] = useState<boolean>(false);
     const [isPlaying, setIsPlaying] = useState<boolean>(false);
     const [isSelectedMusic, setIsSelectedMusic] = useState<boolean>(false);
+    const [isLoadingSongs, setIsLoadingSongs] = useState<boolean>(false);
     const [currentSong, setCurrentSong] = useState<SongProps>({ url: '', name: '', artist: '', cover: '' });
 
     const [playlist, setPlaylist] = useState<SongProps[]>([]);
     const [shuffleHistory, setShuffleHistory] = useState<SongProps[]>([]);
 
     const getSongs = async () => {
+        setIsLoadingSongs(true);
         try {
-            const source = '/songs.json';
+            const source = '/AudioPlayer/songs.json';
             const response = (await axios.get<SongProps[]>(source)).data;
             if (Array.isArray(response)) {
                 setPlaylist(response);
                 setShuffleHistory(shuffleArray(response));
+                setTimeout(async () => {
+                    setIsLoadingSongs(false);
+                }, 2000);
             }
             else {
                 toast.error('Formato de datos inválidos.')
@@ -269,7 +274,7 @@ export const PlayerProvider: React.FC<PlayerProviderProps> = ({ children }) => {
     const handleCreateShuffle = () => {
         setShuffleHistory(shuffleArray(playlist));
         setCurrentSong(shuffleHistory[0]);
-        setTimeout( async() => {
+        setTimeout(async () => {
             await audioRef.current?.play();
             setIsPlaying(true);
         }, 20);
@@ -288,6 +293,7 @@ export const PlayerProvider: React.FC<PlayerProviderProps> = ({ children }) => {
         isMuted,
         isPlaying,
         isSelectedMusic,
+        isLoadingSongs,
         currentSong,
         playlist,
         shuffleHistory,

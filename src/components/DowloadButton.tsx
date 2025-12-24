@@ -33,19 +33,23 @@ export function DownloadButton({ songUrl, fileName }: DownloadButtonProps) {
             }
             document.body.removeChild(link);
         }
-        else{
+        else {
             toast.info("No hay canción seleccionada.");
         }
     };
 
     return (
-        <Tooltip>
-            <TooltipTrigger asChild>
-                <Button className='absolute top-0 end-0 m-3 border border-purple-950! active:border-purple-950/25! bg-purple-900/15! hover:bg-purple-950! active:bg-purple-950/50!' title={`Descargar ${fileName}`} variant={'outline'} onClick={handleDownload} size={'sm'}><BiDownload /></Button>
-            </TooltipTrigger>
-            <TooltipContent>
-                Descargar
-            </TooltipContent>
-        </Tooltip>
+        <>
+            {currentSong.url != "" &&
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <Button className='absolute top-0 end-0 m-3 border border-purple-950! active:border-purple-950/25! bg-purple-900/15! hover:bg-purple-950! active:bg-purple-950/50!' title={`Descargar ${fileName}`} variant={'outline'} onClick={handleDownload} size={'sm'}><BiDownload /></Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                        Descargar
+                    </TooltipContent>
+                </Tooltip>
+            }
+        </>
     );
 };

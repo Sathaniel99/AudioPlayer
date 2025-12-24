@@ -6,3 +6,4 @@ export { Slider } from "./slider";
 export { Toaster } from "./sonner";
 export { toast } from "sonner";
 export { Spinner } from './spinner';
+export { Skeleton } from './skeleton';

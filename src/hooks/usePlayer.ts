@@ -25,6 +25,7 @@ export interface PlayerContextType {
   reproMode: ReproModeProps,
   isMuted: boolean,
   isPlaying: boolean,
+  isLoadingSongs: boolean,
   isSelectedMusic: boolean,
   currentSong: SongProps,
   playlist: SongProps[],

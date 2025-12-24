@@ -50,21 +50,22 @@
   --sidebar-ring: oklch(0.705 0.015 286.067);
 }
 
-button{
+button {
   cursor: pointer;
 }
 
-.hide-second-child > *:nth-child(2) {
+.hide-second-child>*:nth-child(2) {
   display: none;
 }
 
-body, #root {
+body,
+#root {
   margin: 0;
   width: 100%;
   min-height: 100dvh;
 }
 
-body{
+body {
   background: linear-gradient(135deg, rgb(0, 9, 10), rgb(1, 0, 10), rgb(14, 0, 10));
 }
 
@@ -74,14 +75,41 @@ body{
   align-items: center;
 }
 
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #382e3477;
+  border-radius: 5px;
+  transition: all 300ms ease-in-out;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #8000a79c;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(128, 0, 167, 0.925);
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: #8000a79c;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
     background-color: #ffffff;
   }
+
   a:hover {
     color: #747bff;
   }
+
   button {
     background-color: #f9f9f9;
   }
@@ -166,6 +194,7 @@ body{
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
