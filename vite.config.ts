@@ -6,6 +6,7 @@ import { defineConfig } from "vite"
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  base: "https://sathaniel99.github.io/AudioPlayer/",
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
