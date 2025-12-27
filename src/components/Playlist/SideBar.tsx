@@ -1,8 +1,8 @@
 // Componentes
-import { PlaylistElements } from "./index";
+import { PlaylistElements } from "../index";
 import { Button, Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/index";
 // Hooks
-import { usePlayer } from "@/hooks/usePlayer";
+import { usePlayer } from "@/Contexts/PlayerContext/usePlayer";
 // Iconos
 import { BiListUl } from "react-icons/bi";
 

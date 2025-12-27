@@ -1,4 +1,4 @@
-import type { SongProps } from "@/hooks/usePlayer";
+import type { SongProps } from "@/Contexts/PlayerContext/usePlayer";
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 

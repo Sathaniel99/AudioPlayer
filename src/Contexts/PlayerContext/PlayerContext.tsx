@@ -1,33 +1,48 @@
 // Hooks
 import React, { useState, useRef } from "react";
+// Types
 import type { PlayerProviderProps, SongProps, PlayerContextType } from './usePlayer';
 import { PlayerContext } from "./usePlayer";
 // Iconos
 import { BiPause, BiPlay } from "react-icons/bi";
 import { IoVolumeMute, IoVolumeLow, IoVolumeMedium, IoVolumeHigh } from "react-icons/io5";
 // Librerias
-import { formatTime, getTimePercentage, getTimeFromPercentage, shuffleArray } from "@/lib/utils";
-import { toast } from "@/components/ui";
 import axios from 'axios';
+// Componentes
+import { toast } from "@/components/ui";
+// Utiles
+import { formatTime, getTimePercentage, getTimeFromPercentage, shuffleArray } from "@/lib/utils";
 
 
 export const PlayerProvider: React.FC<PlayerProviderProps> = ({ children }) => {
     {/* ESTADOS DEL CONTEXTO */ }
+    // Referencia de audio
     const audioRef = useRef<HTMLAudioElement>(null);
+    
+    // Estados para el tiempo y el transcurso de la canción
     const [timeSong, setTimeSong] = useState<string>("00:00");
     const [totalTimeSong, setTotalTimeSong] = useState<string>("00:00");
     const [timeSongPercent, setTimeSongPercent] = useState<number>(0);
+    
+    // Estados del reproductor
     const [volume, setVolume] = useState<number>(1);
     const [reproMode, setReproMode] = useState<'shuffle' | 'repeat' | 'list'>('list');
+    const [currentSong, setCurrentSong] = useState<SongProps>({ url: '', name: '', artist: '', cover: '' });
+    
+    // Estados para evaluar
     const [isMuted, setIsMuted] = useState<boolean>(false);
     const [isPlaying, setIsPlaying] = useState<boolean>(false);
     const [isSelectedMusic, setIsSelectedMusic] = useState<boolean>(false);
     const [isLoadingSongs, setIsLoadingSongs] = useState<boolean>(false);
-    const [currentSong, setCurrentSong] = useState<SongProps>({ url: '', name: '', artist: '', cover: '' });
 
+    // Estados para la playlist
     const [playlist, setPlaylist] = useState<SongProps[]>([]);
     const [shuffleHistory, setShuffleHistory] = useState<SongProps[]>([]);
 
+
+    {/* FUNCIONES DEL CONTEXTO */ }
+    // Obtener las canciones listadas en 'songs.json'
+    // creo que seria mejor con un useEffect
     const getSongs = async () => {
         setIsLoadingSongs(true);
         try {
@@ -48,11 +63,7 @@ export const PlayerProvider: React.FC<PlayerProviderProps> = ({ children }) => {
             setPlaylist([]);
         }
     };
-    const handleSetPlaylist = (songs: SongProps[]) => {
-        setPlaylist(songs);
-    }
-
-    {/* FUNCIONES DEL CONTEXTO */ }
+    // Actualiza el tiempo de reproducción mientras se reproduce la canción
     const handlerPlay = () => {
         if (audioRef.current) {
             const currentTime = audioRef.current?.currentTime;
@@ -61,11 +72,27 @@ export const PlayerProvider: React.FC<PlayerProviderProps> = ({ children }) => {
             setTimeSongPercent(getTimePercentage(currentTime, duration));
         }
     };
+    // Actualizar el tiempo de la canción mientras se reproduce (usado para simular en el slider)
+    const handledMoveTime = (value: number[]) => {
+        const percentage = value[0];
+        const duration = audioRef.current?.duration;
+
+        if (duration) {
+            const seekTime = getTimeFromPercentage(percentage, duration);
+            if (audioRef.current) {
+                audioRef.current.currentTime = seekTime;
+            }
+        }
+
+        setTimeSongPercent(percentage);
+    };
+    // Para cuando se cargue una canción
     const handlerLoadedMetadata = () => {
         if (audioRef.current) {
             setTotalTimeSong(formatTime(audioRef.current?.duration))
         }
     }
+    // Cambiar volumen
     const changeVolume = (actualVolume: number[]) => {
         const volumeValue = actualVolume[0];
         if (audioRef.current) {
@@ -73,6 +100,7 @@ export const PlayerProvider: React.FC<PlayerProviderProps> = ({ children }) => {
             setVolume(volumeValue);
         }
     }
+    // Obtener el icono de volumen de acuerdo al nivel de volumen
     const getVolumeIcon = (): React.ReactNode => {
         if (isMuted || volume == 0) {
             return <IoVolumeMute />;
@@ -84,6 +112,7 @@ export const PlayerProvider: React.FC<PlayerProviderProps> = ({ children }) => {
             return <IoVolumeHigh />;
         }
     };
+    // Intercambiar entre Mute y Unmute
     const toggleMute = () => {
         if (audioRef.current) {
             const newMutedState = !audioRef.current.muted;
@@ -91,6 +120,7 @@ export const PlayerProvider: React.FC<PlayerProviderProps> = ({ children }) => {
             setIsMuted(newMutedState);
         }
     };
+    // Reproducir/Pausar canción
     const handlePlayPause = () => {
         if (audioRef.current && audioRef.current.src == '') {
             toast.error("No hay musica seleccionada");
@@ -108,12 +138,14 @@ export const PlayerProvider: React.FC<PlayerProviderProps> = ({ children }) => {
             setIsPlaying(false);
         };
     };
+    // Obtener icono y texto de acuerdo a la reproducción
     const getPlay_Pause = (): { icon: React.ReactNode, text: string } => {
         return {
             icon: isPlaying ? <BiPause /> : <BiPlay />,
             text: isPlaying ? 'Pausa' : 'Reproducir',
         }
     }
+    // Anterior canción
     const handleAnteriorSong = () => {
         if (!currentSong?.url || playlist.length === 0) {
             return;
@@ -147,6 +179,7 @@ export const PlayerProvider: React.FC<PlayerProviderProps> = ({ children }) => {
 
         }
     }
+    // Siguiente canción
     const handleSiguienteSong = () => {
         switch (reproMode) {
             case 'list':
@@ -177,6 +210,7 @@ export const PlayerProvider: React.FC<PlayerProviderProps> = ({ children }) => {
 
         }
     }
+    // Detener canción
     const handleStop = () => {
         if (audioRef.current) {
             audioRef.current.pause();
@@ -186,19 +220,7 @@ export const PlayerProvider: React.FC<PlayerProviderProps> = ({ children }) => {
             setTimeSongPercent(0);
         }
     };
-    const handledMoveTime = (value: number[]) => {
-        const percentage = value[0];
-        const duration = audioRef.current?.duration;
-
-        if (duration) {
-            const seekTime = getTimeFromPercentage(percentage, duration);
-            if (audioRef.current) {
-                audioRef.current.currentTime = seekTime;
-            }
-        }
-
-        setTimeSongPercent(percentage);
-    };
+    // Cambiar el modo de reproducir ( aleatorio - lista - repetir )
     const changeReproMode = () => {
         const types: ('shuffle' | 'repeat' | 'list')[] = ['shuffle', 'repeat', 'list'];
         const currentIndex = types.indexOf(reproMode);
@@ -208,6 +230,9 @@ export const PlayerProvider: React.FC<PlayerProviderProps> = ({ children }) => {
             setShuffleHistory(shuffleArray(playlist));
         }
     };
+    // Selecciona la canción y reinicia el reproductor estableciendo la canción por parametros
+    // como la que se está ejecutando, establece que hay una canción seleccionada el porciento
+    // de reproducción a 0 y el tiempo de canción
     const selectSong = async (song: SongProps) => {
         setCurrentSong(song);
         setIsSelectedMusic(true);
@@ -225,6 +250,7 @@ export const PlayerProvider: React.FC<PlayerProviderProps> = ({ children }) => {
 
         }
     };
+    // Para el evento onCanPlay cuando la canción esté disponible evaluar si (isPlaying) se mantuvo la canción anterior en reproduccion o pausa/stop
     const handleCanPlay = async () => {
         try {
             if (isPlaying) {
@@ -235,6 +261,19 @@ export const PlayerProvider: React.FC<PlayerProviderProps> = ({ children }) => {
             setIsPlaying(false);
         }
     };
+    // Crea una lista de reproducción aleatoria basandose en la lista principal
+    const handleCreateShuffle = () => {
+        setShuffleHistory(shuffleArray(playlist));
+        setCurrentSong(shuffleHistory[0]);
+        setTimeout(async () => {
+            await audioRef.current?.play();
+            setIsPlaying(true);
+        }, 20);
+    }
+
+    // Funciones sin usar por ahora
+    // son para añadir , eliminar , limpiar o buscar en la lista 
+    // ( add - delete - clear - check ) de modo lista de reproducción
     const handlePlaylistState = (song: SongProps, cmd: 'add' | 'delete' | 'clear' | 'check') => {
         const newPlaylist = new Set(playlist);
         switch (cmd) {
@@ -253,6 +292,7 @@ export const PlayerProvider: React.FC<PlayerProviderProps> = ({ children }) => {
         }
         setPlaylist(Array.from(newPlaylist));
     }
+    // ( add - delete - clear - check ) de modo lista aleatoria
     const handleShuffleHistory = (song: SongProps, cmd: 'add' | 'delete' | 'clear' | 'check') => {
         const newShuffleHistory = new Set(shuffleHistory);
         switch (cmd) {
@@ -271,15 +311,11 @@ export const PlayerProvider: React.FC<PlayerProviderProps> = ({ children }) => {
         }
         setShuffleHistory(Array.from(newShuffleHistory));
     }
-    const handleCreateShuffle = () => {
-        setShuffleHistory(shuffleArray(playlist));
-        setCurrentSong(shuffleHistory[0]);
-        setTimeout(async () => {
-            await audioRef.current?.play();
-            setIsPlaying(true);
-        }, 20);
+    // Añade las canciones obtenidas a la playlist vacía (no está siendo usada aún pero actualiza la playlist completa)
+    const handleSetPlaylist = (songs: SongProps[]) => {
+        setPlaylist(songs);
     }
-
+    
 
     {/* VALOR DEL CONTEXTO */ }
     const contextValue: PlayerContextType = {
@@ -290,16 +326,18 @@ export const PlayerProvider: React.FC<PlayerProviderProps> = ({ children }) => {
         timeSongPercent,
         volume,
         reproMode,
+        currentSong,
         isMuted,
         isPlaying,
-        isSelectedMusic,
         isLoadingSongs,
-        currentSong,
+        isSelectedMusic,
         playlist,
         shuffleHistory,
 
         // Funciones
+        getSongs,
         handlerPlay,
+        handledMoveTime,
         handlerLoadedMetadata,
         changeVolume,
         getVolumeIcon,
@@ -309,15 +347,14 @@ export const PlayerProvider: React.FC<PlayerProviderProps> = ({ children }) => {
         handleAnteriorSong,
         handleSiguienteSong,
         handleStop,
-        handleSetPlaylist,
-        handledMoveTime,
         changeReproMode,
         selectSong,
-        getSongs,
         handleCanPlay,
+        handleCreateShuffle,
+        // Funciones sin utilizar aun
         handlePlaylistState,
         handleShuffleHistory,
-        handleCreateShuffle,
+        handleSetPlaylist,
     };
     return (
         <PlayerContext.Provider value={contextValue}>

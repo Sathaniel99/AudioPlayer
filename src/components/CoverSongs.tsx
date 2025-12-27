@@ -52,8 +52,8 @@ export const CoverSongs = ({
     }, [name, artist]);
 
     const containerClasses = variant === 'player'
-        ? 'border border-neutral-800 rounded shadow-2xl dark:shadow-neutral-50/10 overflow-hidden'
-        : 'border border-neutral-800 rounded relative overflow-hidden w-full h-full';
+        ? 'border border-purple-800/50 rounded shadow-2xl shadow-purple-900 overflow-hidden'
+        : 'border border-purple-800/50 rounded relative overflow-hidden w-full h-full';
 
     const containerStyle = variant === 'player'
         ? {

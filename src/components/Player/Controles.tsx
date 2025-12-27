@@ -1,12 +1,16 @@
 // Iconos
 import { BiSkipPrevious, BiStop, BiSkipNext } from "react-icons/bi"
+import { RiEqualizerLine } from "react-icons/ri";
 // Componentes
-import { ButtonControl, SideBar } from "./index"
-import { Tooltip, TooltipTrigger, TooltipContent, NavigationMenu, NavigationMenuItem, NavigationMenuContent, NavigationMenuTrigger, Slider, Skeleton } from "./ui/index"
+import { ButtonControl, Equalizer, SideBar } from "../index"
+import { Tooltip, TooltipTrigger, TooltipContent, NavigationMenu, NavigationMenuItem, NavigationMenuContent, NavigationMenuTrigger, Slider, Skeleton, Button, Drawer, DrawerContent, DrawerTrigger, DrawerClose, DrawerTitle } from "../ui/index"
 // Hooks
-import { usePlayer } from "@/hooks/usePlayer"
+import { usePlayer } from "@/Contexts/PlayerContext/usePlayer"
+import { useRef } from "react";
 
 export function Controles() {
+    const EQ = useRef<HTMLButtonElement>(null);
+
     const {
         // ESTADOS
         volume,
@@ -53,8 +57,19 @@ export function Controles() {
             {currentSong.url != "" ?
                 (
                     <>
+                        <Drawer>
+                            <DrawerTrigger ref={EQ}>
+                            </DrawerTrigger>
+                            <DrawerContent className="flex justify-center bg-radial pb-5 to-black from-purple-900/50">
+                                <DrawerTitle className="w-full text-center mt-5 text-4xl font-bold font-sans" aria-describedby="Ecualizador titulo">ECUALIZADOR</DrawerTitle>
+                                <Equalizer />
+                                <DrawerClose asChild>
+                                    <Button className="mx-auto">Cerrar</Button>
+                                </DrawerClose>
+                            </DrawerContent>
+                        </Drawer>
                         {buttons.map((button, index) => (
-                            <ButtonControl key={index} icon={button.icon} text={button.text} handled={button.handled} />
+                            <ButtonControl key={index} icon={button.icon} textTooltip={button.text} handled={button.handled} />
                         ))}
                         <Tooltip>
                             <TooltipTrigger asChild>
@@ -63,7 +78,7 @@ export function Controles() {
                                         <NavigationMenuTrigger className='border border-purple-950 active:border-purple-950/25 bg-purple-900/15! hover:bg-purple-950! active:bg-purple-950/50!' onClick={toggleMute}>
                                             {getVolumeIcon()}
                                         </NavigationMenuTrigger>
-                                        <NavigationMenuContent>
+                                        <NavigationMenuContent className="bg-radial to-black/50 from-purple-950">
                                             <Slider defaultValue={[1]} value={[volume]} onValueChange={changeVolume} max={1} step={0.01} className="w-25 cursor-pointer" />
                                         </NavigationMenuContent>
                                     </NavigationMenuItem>
@@ -71,6 +86,16 @@ export function Controles() {
                             </TooltipTrigger>
                             <TooltipContent>
                                 Volumen
+                            </TooltipContent>
+                        </Tooltip>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <button className="rounded-full w-10 h-10 border border-purple-950 active:border-purple-950/25 bg-purple-900/15 hover:bg-purple-950 active:bg-purple-950/50 transition-all flex justify-center items-center" onClick={() => (EQ.current?.click())}>
+                                    <RiEqualizerLine className="text-purple-300" />
+                                </button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                <p>Ecualizador</p>
                             </TooltipContent>
                         </Tooltip>
                     </>

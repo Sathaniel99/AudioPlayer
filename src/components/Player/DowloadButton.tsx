@@ -1,9 +1,9 @@
 // Componentes
-import { Tooltip, TooltipTrigger, TooltipContent, Button, toast } from "./ui/index";
+import { Tooltip, TooltipTrigger, TooltipContent, Button, toast } from "../ui/index";
 // Iconos
 import { BiDownload } from "react-icons/bi";
 // Hooks
-import { usePlayer } from "@/hooks/usePlayer";
+import { usePlayer } from "@/Contexts/PlayerContext/usePlayer";
 
 interface DownloadButtonProps {
     songUrl: string;
@@ -43,7 +43,7 @@ export function DownloadButton({ songUrl, fileName }: DownloadButtonProps) {
             {currentSong.url != "" &&
                 <Tooltip>
                     <TooltipTrigger asChild>
-                        <Button className='absolute top-0 end-0 m-3 border border-purple-950! active:border-purple-950/25! bg-purple-900/15! hover:bg-purple-950! active:bg-purple-950/50!' title={`Descargar ${fileName}`} variant={'outline'} onClick={handleDownload} size={'sm'}><BiDownload /></Button>
+                        <Button className='absolute top-0 end-0 me-6 mt-3 min-[30rem]:m-3 border border-purple-950! active:border-purple-950/25! bg-purple-900/15! hover:bg-purple-950! active:bg-purple-950/50!' title={`Descargar ${fileName}`} variant={'outline'} onClick={handleDownload} size={'sm'}><BiDownload /></Button>
                     </TooltipTrigger>
                     <TooltipContent>
                         Descargar

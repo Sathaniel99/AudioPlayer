@@ -1,7 +1,6 @@
 // Hooks
 import { useContext, createContext, type ReactNode } from 'react';
 
-
 export type ReproModeProps = 'shuffle' | 'repeat' | 'list';
 
 export interface SongProps {
@@ -23,16 +22,18 @@ export interface PlayerContextType {
   timeSongPercent: number,
   volume: number,
   reproMode: ReproModeProps,
+  currentSong: SongProps,
   isMuted: boolean,
   isPlaying: boolean,
   isLoadingSongs: boolean,
   isSelectedMusic: boolean,
-  currentSong: SongProps,
   playlist: SongProps[],
   shuffleHistory: SongProps[],
 
   // Funciones
+  getSongs: () => void;
   handlerPlay: () => void;
+  handledMoveTime: (value: number[]) => void;
   handlerLoadedMetadata: () => void;
   changeVolume: (actualVolume: number[]) => void;
   getVolumeIcon: () => React.ReactNode;
@@ -42,15 +43,14 @@ export interface PlayerContextType {
   handleAnteriorSong: () => void;
   handleSiguienteSong: () => void;
   handleStop: () => void;
-  handledMoveTime: (value: number[]) => void;
   changeReproMode: () => void;
   selectSong: (song: SongProps) => void;
-  getSongs: () => void;
-  handleSetPlaylist: (songs: SongProps[]) => void;
   handleCanPlay: () => void;
+  handleCreateShuffle: () => void;
+  // Funciones sin utilizar aun
   handlePlaylistState: (song: SongProps, cmd: 'add' | 'delete' | 'clear' | 'check') => void;
   handleShuffleHistory: (song: SongProps, cmd: 'add' | 'delete' | 'clear' | 'check') => void;
-  handleCreateShuffle: () => void;
+  handleSetPlaylist: (songs: SongProps[]) => void;
 }
 
 export const PlayerContext = createContext<PlayerContextType | undefined>(undefined);

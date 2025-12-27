@@ -2,8 +2,10 @@
 import { Slider, Skeleton } from '@/components/ui/index';
 import { DownloadButton, ButtonToggleReproMode, Controles, CoverSongs } from '@/components/index';
 // Hooks
-import { usePlayer } from '@/hooks/usePlayer';
 import { useEffect } from 'react';
+// Context
+import { usePlayer } from '@/Contexts/PlayerContext/usePlayer';
+import { EqualizerProvider } from '@/Contexts/EquilizerContext/EquilizerContext';
 
 export function Player() {
   const {
@@ -28,7 +30,7 @@ export function Player() {
   }, []);
 
   return (
-    <div className='px-15 py-10 flex flex-col justify-center relative min-w-108'>
+    <div className='px-5 py-5 flex flex-col justify-center relative min-w-100'>
       {/* Botones superiores */}
       <DownloadButton fileName={`${currentSong.artist} - ${currentSong.name}`} songUrl={currentSong.url}></DownloadButton>
       <ButtonToggleReproMode />
@@ -41,7 +43,7 @@ export function Player() {
       {/* Nombre de la canción y Artista */}
       <div className='my-2 text-center'>
         <h1 className='text-xl h-7'>{currentSong.artist ? currentSong.artist : 'Seleccione una canción.'}</h1>
-        <h2 className='text-3xl h-9'>{currentSong.name ? currentSong.name :
+        <h2 className='text-3xl h-9 geist-sans'>{currentSong.name ? currentSong.name :
           <span className='flex gap-3'>
             <div className='flex'>
               <p className='m-0 text-red-600'>A</p>
@@ -72,34 +74,46 @@ export function Player() {
       </div>
 
       {/* Tiempo transcurrido, slider y Tiempo total del audio */}
-      <audio className='hidden' ref={audioRef} onCanPlay={handleCanPlay} onEnded={handleSiguienteSong} onTimeUpdate={handlerPlay} onLoadedMetadata={handlerLoadedMetadata} src={currentSong.url} ></audio>
-      <div className='flex h-6 justify-between items-center gap-3 my-2'>
-        {currentSong.url != "" ?
-          (<>
-            <h2>{timeSong}</h2>
-            <Slider
-              defaultValue={[0]}
-              value={[timeSongPercent]}
-              onValueChange={handledMoveTime}
-              max={100}
-              disabled={!isSelectedMusic}
-              step={0.1}
-              className='cursor-pointer'
-            />
-            <h2>{totalTimeSong}</h2>
-          </>) :
-          (<>
-            <span className='animate-pulse text-white/50'>00:00</span>
-            <Skeleton className='h-2 w-full rounded-full' />
-            <span className='animate-pulse text-white/50'>00:00</span>
-          </>)
-        }
-      </div>
+      <EqualizerProvider>
+        <audio
+          className='hidden'
+          ref={audioRef}
+          src={currentSong.url}
+          crossOrigin="anonymous"
+          preload="metadata"
+          onCanPlay={handleCanPlay}
+          onEnded={handleSiguienteSong}
+          onTimeUpdate={handlerPlay}
+          onLoadedMetadata={handlerLoadedMetadata}
+        ></audio>
+        <div className='flex h-6 justify-between items-center gap-3 my-2'>
+          {currentSong.url != "" ?
+            (<>
+              <h2>{timeSong}</h2>
+              <Slider
+                defaultValue={[0]}
+                value={[timeSongPercent]}
+                onValueChange={handledMoveTime}
+                max={100}
+                disabled={!isSelectedMusic}
+                step={0.1}
+                className='cursor-pointer'
+              />
+              <h2>{totalTimeSong}</h2>
+            </>) :
+            (<>
+              <span className='animate-pulse text-white/50'>00:00</span>
+              <Skeleton className='h-2 w-full rounded-full' />
+              <span className='animate-pulse text-white/50'>00:00</span>
+            </>)
+          }
+        </div>
 
-      {/* Botones de control */}
-      <div className='flex gap-3 h-10 justify-center my-3 items-center'>
-        <Controles />
-      </div>
+        {/* Botones de control */}
+        <div className='flex gap-3 h-10 justify-center my-3 items-center'>
+          <Controles />
+        </div>
+      </EqualizerProvider>
     </div>
   )
 }
