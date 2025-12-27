@@ -1,0 +1,4 @@
+- arreglar cuando se cambie de canción que el ecualizador no haga shutdown a la web completa
+- arreglar el usetoast
+- arreglar cuando una imagen no es encontrada
+- crear funcion para guardar presets de EQ en la cache del navegador
