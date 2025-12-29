@@ -7,7 +7,7 @@ export interface SongProps {
   url: string;
   name: string;
   artist: string;
-  cover?: string
+  cover?: string;
 }
 
 export interface PlayerProviderProps {
